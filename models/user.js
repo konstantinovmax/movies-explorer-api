@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
       validator(v) {
         return /^\S*$/.test(v);
       },
-      message: 'Не допускается использование пробелов в пароле',
+      message: 'Не допускается использование пробелов при создании пароля',
     },
   },
   name: {
