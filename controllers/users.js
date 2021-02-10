@@ -21,9 +21,9 @@ const getUserData = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Не удалось найти пользователя');
       }
-      const { email, name, _id } = user;
+      const { email, name } = user;
 
-      return res.status(200).send({ email, name, _id });
+      return res.status(200).send({ email, name });
     })
     .catch(next);
 };
@@ -68,9 +68,9 @@ const createUser = (req, res, next) => {
           return next(err);
         })
         .then((user) => {
-          const { email, _id } = user; // eslint-disable-line
+          const { email, name } = user; // eslint-disable-line
 
-          return res.status(200).send({ data: { email, _id } });
+          return res.status(200).send({ email, name });
         })
         .catch(next);
     })

@@ -48,7 +48,7 @@ const createFilm = (req, res, next) => {
 };
 
 const deleteFilm = (req, res, next) => {
-  Movie.findById(req.params.movieId)
+  Movie.findById(req.params.movieId).select('+owner')
     .catch((err) => {
       if (err.kind === 'ObjectId') {
         throw new BadRequestError('Некорректно указан id фильма');
