@@ -1,13 +1,8 @@
 const router = require('express').Router();
-const { Joi, celebrate } = require('celebrate');
-const {
-  getUserData,
-  updateUserData,
-} = require('../controllers/users');
+const { celebrate, Joi } = require('celebrate');
+const { login, createUser } = require('../controllers/users');
 
-router.get('/me', getUserData);
-
-router.patch('/me', celebrate({
+router.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi
       .string()
@@ -15,6 +10,20 @@ router.patch('/me', celebrate({
       .email(),
     password: Joi
       .string()
+      .required()
+      .min(8),
+  }),
+}), login);
+
+router.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi
+      .string()
+      .required()
+      .email(),
+    password: Joi
+      .string()
+      .required()
       .min(8)
       .pattern(/^\S*$/)
       .message('Не допускается использование пробелов при создании пароля'),
@@ -26,6 +35,6 @@ router.patch('/me', celebrate({
       .pattern(/^\S*$/)
       .message('Не допускается использование пробелов в имени'),
   }),
-}), updateUserData);
+}), createUser);
 
 module.exports = router;

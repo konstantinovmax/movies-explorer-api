@@ -50,7 +50,7 @@ const updateUserData = (req, res, next) => {
 const createUser = (req, res, next) => {
   const { email, password, name } = req.body;
 
-  User.findOne({ email: email }) // eslint-disable-line
+  User.findOne({ email })
     .then((u) => {
       if (u) {
         throw new ConflictError('Указанный email уже занят');
@@ -67,10 +67,8 @@ const createUser = (req, res, next) => {
           }
           return next(err);
         })
-        .then((user) => {
-          const { email, name } = user; // eslint-disable-line
-
-          return res.status(200).send({ email, name });
+        .then(() => {
+          res.status(200).send({ email, name });
         })
         .catch(next);
     })

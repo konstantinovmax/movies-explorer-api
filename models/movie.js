@@ -25,7 +25,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator(v) { // eslint-disable-next-line no-useless-escape
+      validator(v) {
         return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(v);
       },
       message: 'Строка должна быть записана в виде URL-адреса',
@@ -35,7 +35,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator(v) { // eslint-disable-next-line no-useless-escape
+      validator(v) {
         return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(v);
       },
       message: 'Строка должна быть записана в виде URL-адреса',
@@ -45,7 +45,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator(v) { // eslint-disable-next-line no-useless-escape
+      validator(v) {
         return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(v);
       },
       message: 'Строка должна быть записана в виде URL-адреса',
@@ -62,7 +62,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /^[?!,.а-яА-ЯёЁ0-9\s]+$/.test(v);
+        return /^[?!,.\-а-яА-ЯёЁ0-9\s]+$/.test(v);
       },
       message: 'Название фильма должно быть на русском языке',
     },
@@ -72,7 +72,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /^[?!,.a-zA-Z0-9\s]+$/.test(v);
+        return /^[?!,.\-a-zA-Z0-9\s]+$/.test(v);
       },
       message: 'Название фильма должно быть на английском языке',
     },
