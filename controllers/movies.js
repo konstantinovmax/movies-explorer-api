@@ -20,6 +20,7 @@ const createFilm = (req, res, next) => {
     image,
     trailer,
     thumbnail,
+    movieId, // Подключить ответ от сервиса "MoviesExplorer"
     nameRU,
     nameEN,
   } = req.body;
@@ -34,10 +35,22 @@ const createFilm = (req, res, next) => {
     trailer,
     thumbnail,
     owner: req.user._id,
+    movieId, // Подключить ответ от сервиса "MoviesExplorer"
     nameRU,
     nameEN,
   })
-    .then((movie) => res.status(200).send(movie))
+    .then((movie) => res.status(200).send({
+      country: movie.country,
+      director: movie.director,
+      duration: movie.duration,
+      year: movie.year,
+      description: movie.description,
+      image: movie.image,
+      trailer: movie.trailer,
+      thumbnail: movie.thumbnail,
+      nameRU: movie.nameRU,
+      nameEN: movie.nameEN,
+    }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError(err.message);
@@ -66,7 +79,7 @@ const deleteFilm = (req, res, next) => {
           }
           return Movie.findByIdAndRemove(req.params.movieId)
             .then((m) => {
-              res.status(200).send(m);
+              res.status(200).send({ message: `Удален фильм с _id: ${m._id}` });
             });
         });
     })

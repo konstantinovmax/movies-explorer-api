@@ -57,6 +57,9 @@ const movieSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
+  movieId: {
+    type: String, // Тип поля "строка" указано временно
+  },
   nameRU: {
     type: String,
     required: true,
