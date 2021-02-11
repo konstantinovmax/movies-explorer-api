@@ -39,18 +39,7 @@ const createFilm = (req, res, next) => {
     nameRU,
     nameEN,
   })
-    .then((movie) => res.status(200).send({
-      country: movie.country,
-      director: movie.director,
-      duration: movie.duration,
-      year: movie.year,
-      description: movie.description,
-      image: movie.image,
-      trailer: movie.trailer,
-      thumbnail: movie.thumbnail,
-      nameRU: movie.nameRU,
-      nameEN: movie.nameEN,
-    }))
+    .then((movie) => res.status(200).send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError(err.message);
@@ -61,7 +50,7 @@ const createFilm = (req, res, next) => {
 };
 
 const deleteFilm = (req, res, next) => {
-  Movie.findById(req.params.movieId).select('+owner')
+  Movie.findById(req.params.movieId)
     .catch((err) => {
       if (err.kind === 'ObjectId') {
         throw new BadRequestError('Некорректно указан id фильма');
