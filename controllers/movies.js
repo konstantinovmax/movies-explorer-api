@@ -20,7 +20,7 @@ const createFilm = (req, res, next) => {
     image,
     trailer,
     thumbnail,
-    movieId, // Подключить ответ от сервиса "MoviesExplorer"
+    movieId,
     nameRU,
     nameEN,
   } = req.body;
@@ -35,7 +35,7 @@ const createFilm = (req, res, next) => {
     trailer,
     thumbnail,
     owner: req.user._id,
-    movieId, // Подключить ответ от сервиса "MoviesExplorer"
+    movieId,
     nameRU,
     nameEN,
   })
