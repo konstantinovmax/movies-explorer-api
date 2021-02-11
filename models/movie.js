@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validatorjs = require('validator');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -26,7 +27,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(v);
+        return validatorjs.isURL(v);
       },
       message: 'Строка должна быть записана в виде URL-адреса',
     },
@@ -36,7 +37,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(v);
+        return validatorjs.isURL(v);
       },
       message: 'Строка должна быть записана в виде URL-адреса',
     },
@@ -46,7 +47,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(v);
+        return validatorjs.isURL(v);
       },
       message: 'Строка должна быть записана в виде URL-адреса',
     },

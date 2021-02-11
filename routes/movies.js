@@ -28,17 +28,17 @@ router.post('/', celebrate({
     image: Joi
       .string()
       .required()
-      .pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)
+      .pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/)
       .message('Строка должна быть записана в виде URL-адреса'),
     trailer: Joi
       .string()
       .required()
-      .pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)
+      .pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/)
       .message('Строка должна быть записана в виде URL-адреса'),
     thumbnail: Joi
       .string()
       .required()
-      .pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)
+      .pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/)
       .message('Строка должна быть записана в виде URL-адреса'),
     movieId: Joi
       .string()

@@ -3,6 +3,7 @@ const Movie = require('../models/movie');
 const BadRequestError = require('../errors/BadRequestError');
 const ForbiddenError = require('../errors/ForbiddenError');
 const NotFoundError = require('../errors/NotFoundError');
+const ConflictError = require('../errors/ConflictError');
 
 const getUserMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
@@ -25,26 +26,33 @@ const createFilm = (req, res, next) => {
     nameEN,
   } = req.body;
 
-  Movie.create({
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailer,
-    thumbnail,
-    owner: req.user._id,
-    movieId,
-    nameRU,
-    nameEN,
-  })
-    .then((movie) => res.status(200).send(movie))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        throw new BadRequestError(err.message);
+  Movie.findOne({ movieId })
+    .then((m) => {
+      if (m) {
+        throw new ConflictError('Указанный movieId уже занят');
       }
-      return next(err);
+      Movie.create({
+        country,
+        director,
+        duration,
+        year,
+        description,
+        image,
+        trailer,
+        thumbnail,
+        owner: req.user._id,
+        movieId,
+        nameRU,
+        nameEN,
+      })
+        .catch((err) => {
+          if (err.name === 'ValidationError') {
+            throw new BadRequestError(err.message);
+          }
+          return next(err);
+        })
+        .then((movie) => res.status(200).send(movie))
+        .catch(next);
     })
     .catch(next);
 };
