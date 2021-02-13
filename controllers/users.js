@@ -8,18 +8,24 @@ const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 const ConflictError = require('../errors/ConflictError');
+const {
+  userIdIncorrectError,
+  userCouldntFindError,
+  emailAlreadyTakenError,
+  invalidUserDataError,
+} = require('../utils/constants');
 
 const getUserData = (req, res, next) => {
   User.findById(req.user._id)
     .catch((err) => {
       if (err.kind === 'ObjectId') {
-        throw new BadRequestError('Некорректно указан id пользователя');
+        throw new BadRequestError(userIdIncorrectError);
       }
       return next(err);
     })
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Не удалось найти пользователя');
+        throw new NotFoundError(userCouldntFindError);
       }
       return res.status(200).send({ email: user.email, name: user.name });
     })
@@ -38,7 +44,7 @@ const updateUserData = (req, res, next) => {
     })
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Не удалось найти пользователя');
+        throw new NotFoundError(userCouldntFindError);
       }
       return res.status(200).send(user);
     })
@@ -51,7 +57,7 @@ const createUser = (req, res, next) => {
   User.findOne({ email })
     .then((u) => {
       if (u) {
-        throw new ConflictError('Указанный email уже занят');
+        throw new ConflictError(emailAlreadyTakenError);
       }
       bcrypt.hash(password, 10)
         .then((hash) => User.create({
@@ -79,12 +85,12 @@ const login = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Некорректные почта или пароль');
+        throw new UnauthorizedError(invalidUserDataError);
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new UnauthorizedError('Некорректные почта или пароль');
+            throw new UnauthorizedError(invalidUserDataError);
           }
           return user;
         });

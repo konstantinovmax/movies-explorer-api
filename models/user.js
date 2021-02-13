@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validatorjs = require('validator');
+const { invalidEmailError, spacePasswordError } = require('../utils/constants');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -10,7 +11,7 @@ const userSchema = new mongoose.Schema({
       validator(v) {
         return validatorjs.isEmail(v);
       },
-      message: 'Введенный email не соответствует условиям',
+      message: invalidEmailError,
     },
   },
   password: {
@@ -21,7 +22,7 @@ const userSchema = new mongoose.Schema({
       validator(v) {
         return /^\S*$/.test(v);
       },
-      message: 'Не допускается использование пробелов при создании пароля',
+      message: spacePasswordError,
     },
   },
   name: {

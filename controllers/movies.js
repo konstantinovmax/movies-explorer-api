@@ -1,9 +1,15 @@
 const Movie = require('../models/movie');
-
 const BadRequestError = require('../errors/BadRequestError');
 const ForbiddenError = require('../errors/ForbiddenError');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
+const {
+  movieIdAlreadyTakenError,
+  movieIdIncorrectError,
+  movieCouldntFindError,
+  noAccessError,
+  movieDeletedMessage,
+} = require('../utils/constants');
 
 const getUserMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
@@ -29,7 +35,7 @@ const createFilm = (req, res, next) => {
   Movie.findOne({ movieId })
     .then((m) => {
       if (m) {
-        throw new ConflictError('Указанный movieId уже занят');
+        throw new ConflictError(movieIdAlreadyTakenError);
       }
       Movie.create({
         country,
@@ -61,22 +67,22 @@ const deleteFilm = (req, res, next) => {
   Movie.findById(req.params.movieId)
     .catch((err) => {
       if (err.kind === 'ObjectId') {
-        throw new BadRequestError('Некорректно указан id фильма');
+        throw new BadRequestError(movieIdIncorrectError);
       }
       return next(err);
     })
     .then((movie) => {
       if (!movie) {
-        throw new NotFoundError('Не удалось найти фильм');
+        throw new NotFoundError(movieCouldntFindError);
       }
       return Movie.findById(req.params.movieId)
         .then(() => {
           if (movie.owner.toString() !== req.user._id) {
-            throw new ForbiddenError('Нет доступа');
+            throw new ForbiddenError(noAccessError);
           }
           return Movie.findByIdAndRemove(req.params.movieId)
             .then((m) => {
-              res.status(200).send({ message: `Удален фильм с _id: ${m._id}` });
+              res.status(200).send({ message: `${movieDeletedMessage} '${m.nameRU}'` });
             });
         });
     })

@@ -5,6 +5,11 @@ const {
   createFilm,
   deleteFilm,
 } = require('../controllers/movies');
+const {
+  urlStringError,
+  rusNameMovieError,
+  engNameMovieError,
+} = require('../utils/constants');
 
 router.get('/', getUserMovies);
 
@@ -29,17 +34,17 @@ router.post('/', celebrate({
       .string()
       .required()
       .pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/)
-      .message('Строка должна быть записана в виде URL-адреса'),
+      .message(urlStringError),
     trailer: Joi
       .string()
       .required()
       .pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/)
-      .message('Строка должна быть записана в виде URL-адреса'),
+      .message(urlStringError),
     thumbnail: Joi
       .string()
       .required()
       .pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/)
-      .message('Строка должна быть записана в виде URL-адреса'),
+      .message(urlStringError),
     movieId: Joi
       .string()
       .required(),
@@ -47,12 +52,12 @@ router.post('/', celebrate({
       .string()
       .required()
       .pattern(/^[?!,.\-а-яА-ЯёЁ0-9\s]+$/)
-      .message('Название фильма должно быть на русском языке'),
+      .message(rusNameMovieError),
     nameEN: Joi
       .string()
       .required()
       .pattern(/^[?!,.\-a-zA-Z0-9\s]+$/)
-      .message('Название фильма должно быть на английском языке'),
+      .message(engNameMovieError),
   }),
 }), createFilm);
 
@@ -61,7 +66,7 @@ router.delete('/:movieId', celebrate({
     movieId: Joi
       .string()
       .required()
-      .alphanum()
+      .hex()
       .length(24),
   }),
 }), deleteFilm);

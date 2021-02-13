@@ -4,6 +4,7 @@ const {
   getUserData,
   updateUserData,
 } = require('../controllers/users');
+const { spacePasswordError, namePasswordError } = require('../utils/constants');
 
 router.get('/me', getUserData);
 
@@ -17,14 +18,14 @@ router.patch('/me', celebrate({
       .string()
       .min(8)
       .pattern(/^\S*$/)
-      .message('Не допускается использование пробелов при создании пароля'),
+      .message(spacePasswordError),
     name: Joi
       .string()
       .required()
       .min(2)
       .max(30)
       .pattern(/^\S*$/)
-      .message('Не допускается использование пробелов в имени'),
+      .message(namePasswordError),
   }),
 }), updateUserData);
 

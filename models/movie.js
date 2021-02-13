@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 const validatorjs = require('validator');
+const {
+  urlStringErrorError,
+  rusNameMovieError,
+  engNameMovieError,
+} = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -29,7 +34,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return validatorjs.isURL(v);
       },
-      message: 'Строка должна быть записана в виде URL-адреса',
+      message: urlStringErrorError,
     },
   },
   trailer: {
@@ -39,7 +44,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return validatorjs.isURL(v);
       },
-      message: 'Строка должна быть записана в виде URL-адреса',
+      message: urlStringErrorError,
     },
   },
   thumbnail: {
@@ -49,7 +54,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return validatorjs.isURL(v);
       },
-      message: 'Строка должна быть записана в виде URL-адреса',
+      message: urlStringErrorError,
     },
   },
   owner: {
@@ -69,7 +74,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return /^[?!,.\-а-яА-ЯёЁ0-9\s]+$/.test(v);
       },
-      message: 'Название фильма должно быть на русском языке',
+      message: rusNameMovieError,
     },
   },
   nameEN: {
@@ -79,7 +84,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return /^[?!,.\-a-zA-Z0-9\s]+$/.test(v);
       },
-      message: 'Название фильма должно быть на английском языке',
+      message: engNameMovieError,
     },
   },
 });
