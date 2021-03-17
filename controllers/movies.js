@@ -2,9 +2,7 @@ const Movie = require('../models/movie');
 const BadRequestError = require('../errors/BadRequestError');
 const ForbiddenError = require('../errors/ForbiddenError');
 const NotFoundError = require('../errors/NotFoundError');
-const ConflictError = require('../errors/ConflictError');
 const {
-  movieIdAlreadyTakenError,
   movieIdIncorrectError,
   movieCouldntFindError,
   noAccessError,
@@ -32,33 +30,26 @@ const createFilm = (req, res, next) => {
     nameEN,
   } = req.body;
 
-  Movie.findOne({ movieId })
-    .then((m) => {
-      if (m) {
-        throw new ConflictError(movieIdAlreadyTakenError);
+  Movie.create({
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailer,
+    thumbnail,
+    owner: req.user._id,
+    movieId,
+    nameRU,
+    nameEN,
+  })
+    .then((movie) => res.status(200).send(movie))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        throw new BadRequestError(err.message);
       }
-      Movie.create({
-        country,
-        director,
-        duration,
-        year,
-        description,
-        image,
-        trailer,
-        thumbnail,
-        owner: req.user._id,
-        movieId,
-        nameRU,
-        nameEN,
-      })
-        .catch((err) => {
-          if (err.name === 'ValidationError') {
-            throw new BadRequestError(err.message);
-          }
-          return next(err);
-        })
-        .then((movie) => res.status(200).send(movie))
-        .catch(next);
+      return next(err);
     })
     .catch(next);
 };

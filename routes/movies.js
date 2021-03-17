@@ -5,11 +5,7 @@ const {
   createFilm,
   deleteFilm,
 } = require('../controllers/movies');
-const {
-  urlStringError,
-  rusNameMovieError,
-  engNameMovieError,
-} = require('../utils/constants');
+const { urlStringError } = require('../utils/constants');
 
 router.get('/', getUserMovies);
 
@@ -33,31 +29,27 @@ router.post('/', celebrate({
     image: Joi
       .string()
       .required()
-      .pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/)
+      .pattern(/https?:\/\/(?:[-\w]+\.)?([-\w]+)\.\w+(?:\.\w+)?\/?.*/i)
       .message(urlStringError),
     trailer: Joi
       .string()
       .required()
-      .pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/)
+      .pattern(/https?:\/\/(?:[-\w]+\.)?([-\w]+)\.\w+(?:\.\w+)?\/?.*/i)
       .message(urlStringError),
     thumbnail: Joi
       .string()
       .required()
-      .pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/)
+      .pattern(/https?:\/\/(?:[-\w]+\.)?([-\w]+)\.\w+(?:\.\w+)?\/?.*/i)
       .message(urlStringError),
     movieId: Joi
-      .string()
+      .number()
       .required(),
     nameRU: Joi
       .string()
-      .required()
-      .pattern(/^[?!,.\-а-яА-ЯёЁ0-9\s]+$/)
-      .message(rusNameMovieError),
+      .required(),
     nameEN: Joi
       .string()
-      .required()
-      .pattern(/^[?!,.\-a-zA-Z0-9\s]+$/)
-      .message(engNameMovieError),
+      .required(),
   }),
 }), createFilm);
 
