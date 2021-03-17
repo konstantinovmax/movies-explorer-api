@@ -13,6 +13,7 @@ const {
   userCouldntFindError,
   emailAlreadyTakenError,
   invalidUserDataError,
+  userRegistrationSuccess,
 } = require('../utils/constants');
 
 const getUserData = (req, res, next) => {
@@ -27,7 +28,7 @@ const getUserData = (req, res, next) => {
       if (!user) {
         throw new NotFoundError(userCouldntFindError);
       }
-      return res.status(200).send({ email: user.email, name: user.name });
+      return res.status(200).send({ email: user.email, name: user.name, _id: user._id });
     })
     .catch(next);
 };
@@ -35,18 +36,25 @@ const getUserData = (req, res, next) => {
 const updateUserData = (req, res, next) => {
   const { email, name } = req.body;
 
-  User.findByIdAndUpdate(req.user._id, { email, name }, { runValidators: true, new: true })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        throw new BadRequestError(err.message);
+  User.findOne({ email: email }) // eslint-disable-line
+    .then((u) => {
+      if (u) {
+        throw new ConflictError('Указанный email уже занят');
       }
-      return next(err);
-    })
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError(userCouldntFindError);
-      }
-      return res.status(200).send(user);
+      User.findByIdAndUpdate(req.user._id, { email, name }, { runValidators: true, new: true })
+        .catch((err) => {
+          if (err.name === 'ValidationError') {
+            throw new BadRequestError(err.message);
+          }
+          return next(err);
+        })
+        .then((user) => {
+          if (!user) {
+            throw new NotFoundError(userCouldntFindError);
+          }
+          return res.status(200).send(user);
+        })
+        .catch(next);
     })
     .catch(next);
 };
@@ -71,8 +79,8 @@ const createUser = (req, res, next) => {
           }
           return next(err);
         })
-        .then((user) => {
-          res.status(200).send({ email: user.email, name: user.name });
+        .then(() => {
+          res.status(200).send({ successMessage: `${userRegistrationSuccess}` });
         })
         .catch(next);
     })

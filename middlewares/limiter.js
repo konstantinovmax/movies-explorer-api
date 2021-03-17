@@ -3,7 +3,7 @@ const { requestLimitExceedError } = require('../utils/constants');
 
 const limiter = rateLimit({
   windowMs: 300000, // 5 минут
-  max: 60, // максимальное число запросов в заданый выше период
+  max: 200, // максимальное число запросов в заданый выше период
   message: requestLimitExceedError,
 });
 
