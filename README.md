@@ -8,7 +8,7 @@
 
 **Ссылки на проект**
 + URL сервера: [api.me-mk.students.nomoredomains.monster](https://api.me-mk.students.nomoredomains.monster/)
-+ Публичный IP: `84.201.142.45`
++ Публичный IP: `178.154.199.73`
 
 ---
 
